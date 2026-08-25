@@ -23,6 +23,25 @@ from openturns.usecases import ames_housing
 import matplotlib
 
 # %%
+# We will take the X and Y samples from the :ref:`Ames Housing<use-case-ames-housing>` dataset
+# (which contains data about houses in the city of Ames):
+
+data = ames_housing.AmesHousing().data
+Y = data[:, 0]  # Extract the sale price
+X = data[:, 1 : data.getDimension()]  # Extract the other features
+
+# %%
+# We fit a linear regression model to predict Y, e.g. sale prices from the other features, and we compute the R² score to check that the model is relevant:
+
+regression = ot.LinearModelAlgorithm(X, Y).getResult()
+r2 = LinearModelValidation(regression).computeR2Score()
+print(f"R² score: {r2[0]}")
+
+# %%
+# The R² score is relatively close to 1, which means that the linear regression model is relevant.
+# We can now compute the LMG and PMVD indices, the Johnson index and the VIF metric.
+
+# %%
 # We will also perform bootstraps and plot the results, so we start by defining some helper functions.
 # First, we define one that computes the desired quantity:
 
@@ -118,15 +137,6 @@ def bootstrap(X, Y, kind, alpha=0.95, bootstrap_size=100):
 
 
 # %%
-# We can now start using our functions. We will take the X and Y samples from the :ref:`Ames Housing<use-case-ames-housing>` dataset
-# (which contains data about houses in the city of Ames):
-
-
-data = ames_housing.AmesHousing().data
-Y = data[:, 0]  # Extract the sale price
-X = data[:, 1 : data.getDimension()]  # Extract the other features
-
-# %%
 # LMG and PMVD indices:
 
 analysis = MulticollinearityAnalysis(X, Y)
@@ -153,7 +163,7 @@ print(johnson)
 bootstrap(X, Y, "Johnson")
 
 # %%
-# We notice that the Johnson indices are close to the LMG ones, which was expected (it's a known theoretical result).
+# We notice that the Johnson indices are close to the LMG ones, (note that in two-dimensional cases, they are proven to be strictly equal).
 #
 # VIF metric:
 
