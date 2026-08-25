@@ -18,6 +18,7 @@ Compute sensitivity indices in a multicollinear context
 
 import openturns as ot
 import openturns.viewer as otv
+from openturns.experimental import LinearModelValidation, MulticollinearityAnalysis
 from openturns.usecases import ames_housing
 import matplotlib
 
@@ -35,7 +36,7 @@ def compute_quantity(X, Y, kind):
     - Y: the output sample
     - kind: the type of quantity to compute ("LMG", "PMVD", "Johnson" or "VIF")
     """
-    analysis = ot.MulticollinearityAnalysis(X, Y)
+    analysis = MulticollinearityAnalysis(X, Y)
     if kind == "LMG":
         lmg, _ = analysis.computeLmgPmvd()
         return lmg
@@ -49,6 +50,7 @@ def compute_quantity(X, Y, kind):
     else:
         raise Exception(f"Invalid kind: {kind}")
 
+
 # %%
 # Then we add a function that builds a graph:
 
@@ -57,7 +59,7 @@ def create_graph(title, names, mean, interval):
     dimension = mean.getDimension()
     palette = ot.Drawable.BuildDefaultPalette(2)
     graph = ot.Graph(title, "", "")
-    matplotlib.rc('xtick', labelsize=8.0)  # reduce the font size of the X labels
+    matplotlib.rc("xtick", labelsize=8.0)  # reduce the font size of the X labels
 
     # Confidence bounds
     lb = interval.getLowerBound()
@@ -80,6 +82,7 @@ def create_graph(title, names, mean, interval):
     graph.setBoundingBox(box)
     axes_kw = {"xticks": range(1, dimension + 1), "xticklabels": names}
     otv.View(graph, axes_kw=axes_kw, figure_kw={"figsize": (10.0, 4.8)})
+
 
 # %%
 # And finally, a function that performs a bootstrap and creates a graph with the results:
@@ -113,6 +116,7 @@ def bootstrap(X, Y, kind, alpha=0.95, bootstrap_size=100):
     interval = ot.Interval(lb, ub)
     create_graph(kind, X.getDescription(), mean, interval)
 
+
 # %%
 # We can now start using our functions. We will take the X and Y samples from the :ref:`Ames Housing<use-case-ames-housing>` dataset
 # (which contains data about houses in the city of Ames):
@@ -120,12 +124,12 @@ def bootstrap(X, Y, kind, alpha=0.95, bootstrap_size=100):
 
 data = ames_housing.AmesHousing().data
 Y = data[:, 0]  # Extract the sale price
-X = data[:, 1:data.getDimension()]  # Extract the other features
+X = data[:, 1 : data.getDimension()]  # Extract the other features
 
 # %%
 # LMG and PMVD indices:
 
-analysis = ot.MulticollinearityAnalysis(X, Y)
+analysis = MulticollinearityAnalysis(X, Y)
 lmg, pmvd = analysis.computeLmgPmvd()
 print(lmg)
 
@@ -141,7 +145,7 @@ bootstrap(X, Y, "PMVD")
 # %%
 # Johnson index:
 
-analysis = ot.MulticollinearityAnalysis(X, Y)
+analysis = MulticollinearityAnalysis(X, Y)
 johnson = analysis.computeJohnson()
 print(johnson)
 
@@ -153,7 +157,7 @@ bootstrap(X, Y, "Johnson")
 #
 # VIF metric:
 
-analysis = ot.MulticollinearityAnalysis(X)
+analysis = MulticollinearityAnalysis(X)
 vif = analysis.computeVIF()
 print(vif)
 
