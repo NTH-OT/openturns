@@ -14,20 +14,11 @@ Refer to :ref:`sensitivity_sobol`.
     :template: class.rst_t
 
     CorrelationAnalysis
+    experimental.MulticollinearityAnalysis
     TaylorExpansionMoments
     ANCOVA
     FAST
     RankSobolSensitivityAlgorithm
-
-.. currentmodule:: openturns.experimental
-
-.. autosummary::
-    :toctree: _generated/
-    :template: class.rst_t
-
-    MulticollinearityAnalysis
-
-.. currentmodule:: openturns
 
     :template: classWithPlot.rst_t
 

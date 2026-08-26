@@ -1,6 +1,11 @@
 %feature("docstring") OT::MulticollinearityAnalysis
 "Multicollinearity analysis methods.
 
+.. warning::
+    This class is experimental and likely to be modified in future releases.
+    To use it, import the ``openturns.experimental`` submodule.
+
+
 Provides sensitivity analysis methods to determine the influence of each
 component of a random vector over a single one-dimensional variable,
 in the case where the components are correlated.
